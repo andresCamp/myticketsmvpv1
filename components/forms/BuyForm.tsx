@@ -46,7 +46,6 @@ const BuyForm = () => {
         placeholder="Choose game"
         selectedKeys={game}
         className="max-w-xs"
-        onSelectionChange={setGame}
       >
         {gameList.map((game) => (
           <SelectItem key={game} value={game}>
