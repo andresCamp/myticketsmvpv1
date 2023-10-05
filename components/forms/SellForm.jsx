@@ -4,6 +4,9 @@ import { isBefore } from 'date-fns';
 import { useRouter } from 'next/navigation';
 import React, {Key, useState} from 'react'
 
+import axios from 'axios';
+
+
 const gameList = [
   { name: "USC", date: new Date(2023, 9, 14, 17, 30) }, // October 14th, 2023 17:30
   { name: "Pittsburgh", date: new Date(2023, 9, 28, 13, 30) }, // October 28th, 2023 13:30
@@ -11,33 +14,39 @@ const gameList = [
 ];
 
 const BuyForm = () => {
-    const [name, setName] = useState('')
-    const [email, setEmail] = useState('')
-    const [ndid, setNdid] = useState('')
-    const [game, setGame] = useState(new Set())
-    const [emailError, setEmailError] = useState('')  // New state for email error
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [ndid, setNdid] = useState('')
+  const [game, setGame] = useState(new Set())
+  const [emailError, setEmailError] = useState('')  // New state for email error
+  
+  const router = useRouter()
+  
+  const validateEmail = (email) => {
+      const regex = /^[a-zA-Z0-9._-]+@nd\.edu$/;
+      return regex.test(email);
+  }
 
-    const router = useRouter()
-
-    const validateEmail = (email) => {
-        const regex = /^[a-zA-Z0-9._-]+@nd\.edu$/;
-        return regex.test(email);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if(!validateEmail(email)) {
+        setEmailError("Please use an 'nd.edu' domain email.");
+        return;
     }
+    console.log({
+      name: name,
+      email: email,
+      ndid: ndid,
+      game: Array.from(game).join(', ')  // If multiple selections are possible
+    });
 
-    const handleSubmit = (event) => {
-      event.preventDefault();
-      if(!validateEmail(email)) {
-          setEmailError("Please use an 'nd.edu' domain email.");
-          return;
-      }
-      console.log({
-        name: name,
-        email: email,
-        ndid: ndid,
-        game: Array.from(game).join(', ')  // If multiple selections are possible
-      });
+    axios.post(`https://sheet.best/api/sheets/c475e5a6-c1c8-4d93-8cc8-4f9781952bd4/tabs/Supply`,
+    {name, email, ndid, game: Array.from(game).join(', ')},
+  )
 
-      router.push("/success")
+
+ 
+    router.push("/success")
 
     }
 

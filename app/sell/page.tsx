@@ -1,5 +1,4 @@
-import BuyForm from '@/components/forms/BuyForm'
-import BuyForm2 from '@/components/forms/BuyForm2'
+import SellForm from '@/components/forms/SellForm'
 import React from 'react'
 
 const page = () => {
@@ -10,7 +9,7 @@ const page = () => {
         <p>Complete the form below and we will send offers to your inbox!</p>
       </div>
 
-        <BuyForm2/>
+        <SellForm/>
 
 
 
