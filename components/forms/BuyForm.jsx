@@ -22,61 +22,21 @@ const BuyForm = () => {
   
   const router = useRouter()
 
-
-
-
-
-  // const {
-  //   GOOGLE_PRIVATE_KEY,
-  //   GOOGLE_CLIENT_EMAIL,
-  //   GOOGLE_SUPPLY_SHEET_ID,
-  //   GOOGLE_DEMAND_SHEET_ID
-  // } = process.env;
-
-  // const serciviceAccountAuth = new JWT({
-  //   email: GOOGLE_CLIENT_EMAIL,
-  //   key: GOOGLE_PRIVATE_KEY,
-  //   scopes: ['https://www.googleapis.com/auth/spreadsheets']
-  // });
-
-  // const doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID, serciviceAccountAuth);
-
-  // const appendSpreadsheet = async (data) => {
-  //   try {
-  //     await doc.useServiceAccountAuth({
-  //       client_email: GOOGLE_CLIENT_EMAIL,
-  //       private_key: GOOGLE_PRIVATE_KEY,
-  //     });
-  //     await doc.loadInfo();
-  //     console.log(doc.loadInfo());
-  //     const sheet = doc.sheetsById[GOOGLE_DEMAND_SHEET_ID];
-  //     await sheet.addRow(data);
-  //     return result;
-  //   }
-  //   catch (e) {
-  //     console.error('Error: ', e);
-  //   }
+  // const validateEmail = (email) => {
+  //     const regex = /^[a-zA-Z0-9._-]+@nd\.edu$/;
+  //     return regex.test(email);
   // }
-    // const appendSpreadsheet = async (data) => {
-    //   try {
-    //     await doc.loadInfo();
-    //     const sheet = doc.sheetsById[process.env.GOOGLE_SUPPLY_SHEET_ID];
-    //     await sheet.addRow(data);
-    //   } catch (e) {
-    //     console.error('Error: ', e);
-    //   }
-    // };
 
-  
   const validateEmail = (email) => {
-      const regex = /^[a-zA-Z0-9._-]+@nd\.edu$/;
-      return regex.test(email);
-  }
+    const regex = /^[a-zA-Z0-9._-]+@(nd\.edu|alumni\.nd\.edu)$/;
+    return regex.test(email);
+}
+
 
   const handleSubmit = (event) => {
     event.preventDefault();
     if(!validateEmail(email)) {
-        setEmailError("Please use an 'nd.edu' domain email.");
+        setEmailError("Please use an 'nd.edu' or 'alumni.nd.edu' domain email.");
         return;
     }
     console.log({
@@ -86,20 +46,15 @@ const BuyForm = () => {
       game: Array.from(game).join(', ')  // If multiple selections are possible
     });
 
-
-    // appendSpreadsheet({ name, email, ndid, game: Array.from(game).join(', ') });
-
     axios.post(`https://sheet.best/api/sheets/c475e5a6-c1c8-4d93-8cc8-4f9781952bd4`,
-    {name, email, ndid, game: Array.from(game).join(', ')}
-  )
-
-
+      {name, email, ndid, game: Array.from(game).join(', ')}
+    )
  
     router.push("/success")
 
-    }
+  }
 
-    const activeGames = gameList.filter(game => isBefore(new Date(), game.date));
+  const activeGames = gameList.filter(game => isBefore(new Date(), game.date));
 
   return (
     <div>
@@ -122,15 +77,6 @@ const BuyForm = () => {
             onValueChange={setEmail}
         />
         {emailError && <span className="text-red-500">{emailError}</span>}  {/* Display error if it exists */}
-        <Input 
-            label="NDID"
-            type='number'
-            isRequired
-            placeholder="Enter your NDID"
-            variant="bordered"
-            value={ndid}
-            onValueChange={setNdid}
-        />
         
         <Select
           label="Game"

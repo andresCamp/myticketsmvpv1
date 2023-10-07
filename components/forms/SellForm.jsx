@@ -22,15 +22,21 @@ const BuyForm = () => {
   
   const router = useRouter()
   
+  // const validateEmail = (email) => {
+  //     const regex = /^[a-zA-Z0-9._-]+@nd\.edu$/;
+  //     return regex.test(email);
+  // }
+
   const validateEmail = (email) => {
-      const regex = /^[a-zA-Z0-9._-]+@nd\.edu$/;
-      return regex.test(email);
-  }
+    const regex = /^[a-zA-Z0-9._-]+@(nd\.edu|alumni\.nd\.edu)$/;
+    return regex.test(email);
+}
+
 
   const handleSubmit = (event) => {
     event.preventDefault();
     if(!validateEmail(email)) {
-        setEmailError("Please use an 'nd.edu' domain email.");
+        setEmailError("Please use an 'nd.edu' or 'alumni.nd.edu' domain email.");
         return;
     }
     console.log({
@@ -73,15 +79,7 @@ const BuyForm = () => {
             onValueChange={setEmail}
         />
         {emailError && <span className="text-red-500">{emailError}</span>}  {/* Display error if it exists */}
-        <Input 
-            label="NDID"
-            type='number'
-            isRequired
-            placeholder="Enter your NDID"
-            variant="bordered"
-            value={ndid}
-            onValueChange={setNdid}
-        />
+   
         
         <Select
           label="Game"
